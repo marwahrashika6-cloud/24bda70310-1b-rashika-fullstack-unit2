@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Enterprise RESTful API Platform (Spring Boot 3 & Java 21)
 
 [![Java 21](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/)
@@ -175,3 +176,6 @@ git push -u origin main
 
 ## 📄 License
 This project is licensed under the [Apache License 2.0](LICENSE).
+=======
+# 24bda70310-1b-rashika-fullstack-unit2
+>>>>>>> 12aa6b36f492f29eb501032dbfecb98c21a968fe
