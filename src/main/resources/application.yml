@@ -1,0 +1,79 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: spring-enterprise-rest-api
+  
+  # Default H2 In-Memory DB for immediate zero-config startup
+  datasource:
+    url: jdbc:h2:mem:enterprisedb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        # Performance optimization: batch fetching to prevent N+1 query problem
+        default_batch_fetch_size: 25
+        jdbc:
+          batch_size: 30
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+
+  cache:
+    type: caffeine
+    cache-names:
+      - customers
+      - customer-summaries
+      - accounts
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=15m,recordStats
+
+# Enterprise Security & Cryptography Configuration
+security:
+  jwt:
+    # 256-bit minimum HMAC-SHA256 secret key
+    secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    access-token-expiration-ms: 3600000 # 1 hour
+    refresh-token-expiration-ms: 604800000 # 7 days
+  
+  encryption:
+    # AES-256 Key (Base64 encoded 32 bytes) for field-level encryption
+    aes-secret-key: dGhpc0lzQVNlY3VyZUFQUzI1NktleUZvclRlc3QxMjM=
+
+# Actuator Observability
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,caches
+  endpoint:
+    health:
+      show-details: always
+
+# OpenAPI / Swagger UI
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    doc-expansion: none
